@@ -1,0 +1,64 @@
+kind: Template
+apiVersion: v1
+template: zeppelin
+metadata:
+  name: zeppelin
+objects:
+
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: zeppelin-web
+    labels:
+      name: zeppelin
+  spec:
+    ports:
+      - name: zeppelin-web
+        protocol: TCP
+        port: 8080
+        targetPort: 8080
+    selector:
+      name: zeppelin
+
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: zeppelin
+    labels:
+      name: zeppelin
+  spec:
+    strategy:
+      type: Rolling
+    triggers:
+      - type: ConfigChange
+    replicas: 1
+    selector:
+      name: zeppelin
+    template:
+      metadata:
+        labels:
+          name: zeppelin
+      spec:
+        containers:
+          - name: zeppelin
+            image: 172.30.160.138:5000/myproject/openshift-zeppelin
+            env:
+              - name: SPARK_USER
+                value: "zeppelin"
+            ports:
+              - name: zeppelin-web
+                protocol: TCP
+                containerPort: 8080
+
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: zeppelin-web
+    labels:
+      name: zeppelin
+  spec:
+    host:
+    to:
+      kind: Service
+      name: zeppelin-web
+
