@@ -41,7 +41,7 @@ objects:
       spec:
         containers:
           - name: zeppelin
-            image: 172.30.160.138:5000/myproject/openshift-zeppelin
+            image: mattf/openshift-zeppelin
             env:
               - name: SPARK_USER
                 value: "zeppelin"
