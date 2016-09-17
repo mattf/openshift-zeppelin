@@ -42,9 +42,6 @@ objects:
         containers:
           - name: zeppelin
             image: mattf/openshift-zeppelin
-            env:
-              - name: SPARK_USER
-                value: "zeppelin"
             ports:
               - name: zeppelin-web
                 protocol: TCP
